@@ -1,0 +1,18 @@
+{
+  "name": "ambient",
+  "version": "0.0.1",
+  "description": "An ambience sound maker for learning Web Audio and TypeScript.",
+  "main": "src/index.ts",
+  "scripts": {
+    "start": "webpack-dev-server --open"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "html-webpack-plugin": "^2.30.1",
+    "ts-loader": "^3.1.1",
+    "typescript": "^2.6.1",
+    "webpack": "^3.8.1",
+    "webpack-dev-server": "^2.9.4"
+  },
+  "author": "zhangbenber"
+}
