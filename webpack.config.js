@@ -1,4 +1,5 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 module.exports = {
 	entry: './src/app.ts',
@@ -23,6 +24,9 @@ module.exports = {
 	plugins: [
 		new HtmlWebpackPlugin({
 			template: __dirname + "/src/index.html"
-		})
+		}),
+		new CopyWebpackPlugin([{
+			from: __dirname + '/static'
+		}])
 	],
 }

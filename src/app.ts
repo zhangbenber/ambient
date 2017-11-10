@@ -1,5 +1,10 @@
-let h1: HTMLHeadingElement = document.createElement("h1")
+import Clip from './Clip'
+import Source from './Source'
 
-h1.innerText = "It works!"
+let context: AudioContext = new AudioContext()
 
-document.body.appendChild(h1)
+let clips: Array<Clip> = [
+	new Clip(context, 'test')
+]
+
+new Source(context, clips[0])
