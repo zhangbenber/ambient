@@ -1,16 +1,16 @@
 import Clip from './Clip'
 import Sound from './Sound'
+import Controller from './Controller'
 
 let context: AudioContext = new AudioContext()
+let field: HTMLDivElement = document.createElement('div')
+field.className = 'field'
+document.body.appendChild(field)
 
 let clips: Array<Clip> = [
-	new Clip('test')
+	new Clip('White Noise')
 ]
 
-let source = new Sound(clips[0])
-setTimeout(() => {
-	source.remove()
-	source = null
-}, 2000)
+let ctrl = new Controller(clips[0])
 
-export { context }
+export { context, field }

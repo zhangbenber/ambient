@@ -11,7 +11,10 @@ export default class {
 
 	constructor(
 		readonly name: string,
-		readonly audio: string = 'default.ogg'
+		readonly audio: string = 'default.ogg',
+		readonly icon: string = 'default.svg',
+		readonly color: string = '#2a7ac3',
+		readonly volume: number = 1
 	) { }
 
 	addSound(source: Sound): Promise<AudioBuffer> {

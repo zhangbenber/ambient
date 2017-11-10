@@ -2,8 +2,8 @@ import { context } from './app'
 import Clip from './Clip'
 
 export default class {
-	public volume: number = 1
-	public pan: number = 0
+	private _volume: number = 1
+	private _pan: number = 0
 
 	private source: AudioBufferSourceNode = null
 	private panner: StereoPannerNode = null
@@ -12,12 +12,24 @@ export default class {
 	
 	constructor(
 		readonly clip: Clip
-	) {
-		clip.addSound(this).then(buffer => {
-			this.ready(buffer)
-		}, err => {
-			console.error(err)
-		})
+	) {	}
+
+	get pan(): number {
+		return this._pan
+	}
+
+	set pan(pan: number) {
+		this._pan = pan
+		this.updateAttr()
+	}
+
+	get volume(): number {
+		return this._volume
+	}
+
+	set volume(volume: number) {
+		this._volume = volume
+		this.updateAttr()
 	}
 
 	ready(buffer: AudioBuffer): void {
@@ -42,11 +54,22 @@ export default class {
 	}
 
 	private updateAttr(): void {
-		this.panner.pan.value = this.pan
-		this.gain.gain.value = this.volume
+		if (!this.source) {
+			return
+		}
+		this.panner.pan.value = this._pan
+		this.gain.gain.value = this._volume * 0.5 * this.clip.volume
 	}
 
-	remove(): void {
+	start(): void {
+		this.clip.addSound(this).then(buffer => {
+			this.ready(buffer)
+		}, err => {
+			console.error(err)
+		})
+	}
+
+	stop(): void {
 		if (!this.source) {
 			return
 		}
