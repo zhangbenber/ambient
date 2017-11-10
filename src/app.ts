@@ -1,10 +1,16 @@
 import Clip from './Clip'
-import Source from './Source'
+import Sound from './Sound'
 
 let context: AudioContext = new AudioContext()
 
 let clips: Array<Clip> = [
-	new Clip(context, 'test')
+	new Clip('test')
 ]
 
-new Source(context, clips[0])
+let source = new Sound(clips[0])
+setTimeout(() => {
+	source.remove()
+	source = null
+}, 1000)
+
+export { context }

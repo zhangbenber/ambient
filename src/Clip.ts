@@ -1,22 +1,22 @@
-import Source from './Source'
+import { context } from './app'
+import Sound from './Sound'
 
 export default class {
-	buffer: AudioBuffer = null
-	private sources: Array<Source> = null
+	private buffer: AudioBuffer = null
+	private sounds: Array<Sound> = null
 	private pending: Array<{
 		resolve: (value?: AudioBuffer | PromiseLike<AudioBuffer>) => void,
 		reject: (reason?: any) => void
 	}> = null
 
 	constructor(
-		public context: AudioContext,
-		public name: string,
-		public audio: string = 'default.ogg'
+		readonly name: string,
+		readonly audio: string = 'default.ogg'
 	) { }
 
-	addSource(source: Source): Promise<AudioBuffer> {
-		if (this.sources === null) {
-			this.sources = []
+	addSound(source: Sound): Promise<AudioBuffer> {
+		if (this.sounds === null) {
+			this.sounds = []
 		}
 		if (this.pending === null) {
 			this.pending = []
@@ -26,24 +26,36 @@ export default class {
 				resolve(this.buffer)
 			} else {
 				this.pending.push({ resolve, reject })
-				if (this.sources.length === 0) {
+				if (this.sounds.length === 0) {
 					this.load()
 				}
 			}
-			this.sources.push(source)
+			this.sounds.push(source)
 		})
+	}
+
+	removeSound(source: Sound): void {
+		let index = this.sounds.indexOf(source)
+		if (index > -1) {
+			this.sounds.splice(index, 1)
+		}
+		if (this.sounds.length === 0) {
+			this.sounds = null
+			this.buffer = null
+		}
 	}
 
 	private load(): void {
 		let xhr = new XMLHttpRequest()
 		xhr.responseType = 'arraybuffer'
 		xhr.onload = () => {
-			this.context.decodeAudioData(xhr.response).then(
+			context.decodeAudioData(xhr.response).then(
 				buffer => {
 					this.buffer = buffer
 					this.pending.forEach(executor => {
 						executor.resolve(buffer)
 					})
+					this.pending = null
 				},
 				err => this.handleError(err)
 			)
@@ -59,5 +71,6 @@ export default class {
 		this.pending.forEach(executor => {
 			executor.reject(err)
 		})
+		this.pending = null
 	}
 }
