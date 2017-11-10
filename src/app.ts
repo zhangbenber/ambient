@@ -11,6 +11,6 @@ let source = new Sound(clips[0])
 setTimeout(() => {
 	source.remove()
 	source = null
-}, 1000)
+}, 2000)
 
 export { context }
